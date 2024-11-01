@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         ).copyWith(secondary: Colors.deepOrange[400]),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: MyHomePage(),
     );
   }
 }

@@ -53,6 +53,9 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                       if (value == null || value.isEmpty) {
                         return "Nama produk tidak boleh kosong!";
                       }
+                      if (value.length > 100) {
+                        return "Karakter maksimal 100 tercapai";
+                      }
                       return null;
                     },
                   ),
@@ -75,6 +78,9 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                     validator: (String? value) {
                       if (value == null || value.isEmpty) {
                         return "Deskripsi produk tidak boleh kosong!";
+                      }
+                      if (value.length > 255) {
+                        return "Karakter maksimal 255 tercapai";
                       }
                       return null;
                     },
@@ -102,6 +108,11 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                       if (int.tryParse(value) == null) {
                         return "Harga produk harus berupa angka!";
                       }
+                      int? parsedValue = int.tryParse(value);
+                      if (parsedValue == null || parsedValue <= 0) {
+                        return "Harga produk harus berupa integer positif!";
+                      }
+
                       return null;
                     },
                   ),
@@ -127,6 +138,10 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                       }
                       if (int.tryParse(value) == null) {
                         return "Jumlah Tersedia harus berupa angka!";
+                      }
+                      int? parsedValue = int.tryParse(value);
+                      if (parsedValue == null || parsedValue <= 0) {
+                        return "Jumlah Tersedia harus berupa integer positif!";
                       }
                       return null;
                     },

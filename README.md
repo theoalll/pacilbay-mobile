@@ -339,7 +339,7 @@ Dalam kode Dart tersebut, penggunaan const memiliki beberapa fungsi:
 </details>
 
 <details>
-  <summary><h3>4️⃣ Tema (theme) dalam Aplikasi Flutter</h3><summary>
+  <summary><h3>4️⃣ Tema (theme) dalam Aplikasi Flutter</h3></summary>
 
 Flutter menyediakan widget `ThemeData` yang dapat diatur dalam `MaterialApp` untuk memastikan konsistensi tampilan di seluruh aplikasi. Dengan menggunakan `ThemeData`, kita bisa mengatur warna, font, bentuk tombol, gaya teks, dan elemen UI lainnya agar konsisten di seluruh aplikasi.
 

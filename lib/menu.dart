@@ -1,3 +1,4 @@
+import 'package:pacilbay/productentry_form.dart';
 import 'package:flutter/material.dart';
 import 'package:pacilbay/widgets/left_drawer.dart';
 
@@ -156,12 +157,20 @@ class ItemCard extends StatelessWidget {
       child: InkWell(
         // Aksi ketika kartu ditekan.
         onTap: () {
-          // Menampilkan pesan SnackBar saat kartu ditekan.
+          // Memunculkan SnackBar ketika diklik
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-                SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
-            );
+            ..showSnackBar(SnackBar(
+                content: Text("Kamu telah menekan tombol ${item.name}!")));
+
+          // Navigate ke route yang sesuai (tergantung jenis tombol)
+          if (item.name == "Tambah Produk") {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ProductEntryFormPage(),
+                ));
+          }
         },
         // Container untuk menyimpan Icon dan Text
         child: Container(

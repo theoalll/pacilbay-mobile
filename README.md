@@ -207,19 +207,23 @@ Column(
 ```
 Penggunaan `Column` dalam kode ini bertujuan untuk menyusun beberapa widget `Text` secara vertikal, dari atas ke bawah. 
 - `Column` Widget
+
 `Column` digunakan untuk menyusun anak-anaknya (dalam hal ini widget `Text`) secara vertikal.
 
 - `mainAxisAlignment: MainAxisAlignment.center`
+
 Properti `mainAxisAlignment` mengatur posisi anak-anak widget di **sumbu utama** (vertikal dalam `Column`). Dengan `MainAxisAlignment.center`, semua anak-anak `Column` akan ditempatkan di tengah-tengah sumbu vertikal.
 
 - `crossAxisAlignment: CrossAxisAlignment.start`
+
 Properti `crossAxisAlignment` mengatur posisi anak-anak di sepanjang **sumbu sekunder** (horizontal dalam `Column`). Dengan `CrossAxisAlignment.start`, setiap anak dari `Column` akan disejajarkan di sisi **kiri** dari sumbu horizontal.
 
 - `children`
-Daftar widget yang merupakan anak-anak dari `Column`. Dalam kode ini, ada tiga widget `Text`:
-- `Text('Item 1')`
-- `Text('Item 2')`
-- `Text('Item 3')`
+
+  Daftar widget yang merupakan anak-anak dari `Column`. Dalam kode ini, ada tiga widget `Text`:
+  `Text('Item 1')`
+  `Text('Item 2')`
+  `Text('Item 3')`
 
 Ketiga widget ini akan ditampilkan secara vertikal dalam `Column`, dimulai dari sisi kiri (karena `crossAxisAlignment.start`) dan dipusatkan di sumbu vertikal (karena `mainAxisAlignment.center`).
 
@@ -268,14 +272,14 @@ Kode `Row` ini digunakan untuk menyusun tiga ikon secara horizontal dengan jarak
 
 ### Perbandingan `Column` vs `Row`
 
-| **Aspek**              | **Column**                          | **Row**                             |
-|------------------------|-------------------------------------|-------------------------------------|
-| **Orientasi**           | Vertikal (dari atas ke bawah)       | Horizontal (dari kiri ke kanan)     |
-| **Main Axis**           | Vertikal                            | Horizontal                          |
-| **Cross Axis**          | Horizontal                          | Vertikal                            |
-| **Penggunaan**          | Untuk menyusun elemen vertikal      | Untuk menyusun elemen horizontal    |
+| **Aspek**              | **Column**                          | **Row**                                   |
+|------------------------|-------------------------------------|-------------------------------------------|
+| **Orientasi**           | Vertikal (dari atas ke bawah)       | Horizontal (dari kiri ke kanan)           |
+| **Main Axis**           | Vertikal                            | Horizontal                                |
+| **Cross Axis**          | Horizontal                          | Vertikal                                  |
+| **Penggunaan**          | Untuk menyusun elemen vertikal      | Untuk menyusun elemen horizontal          |
 | **Alignment**           | `mainAxisAlignment`, `crossAxisAlignment` | `mainAxisAlignment`, `crossAxisAlignment` |
-| **Contoh Situasi**      | Daftar item, formulir, paragraf     | Navigasi horizontal, barisan ikon   |
+| **Contoh Situasi**      | Daftar item, formulir, paragraf     | Navigasi horizontal, icons                |
 
 ### Contoh Penggunaan Gabungan:
 ```dart

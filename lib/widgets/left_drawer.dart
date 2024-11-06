@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pacilbay/menu.dart';
-import 'package:pacilbay/productentry_form.dart';
+import 'package:pacilbay/screens/menu.dart';
+import 'package:pacilbay/screens/productentry_form.dart';
 
 import 'package:flutter/material.dart';
 

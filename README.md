@@ -208,15 +208,15 @@ Column(
 Penggunaan `Column` dalam kode ini bertujuan untuk menyusun beberapa widget `Text` secara vertikal, dari atas ke bawah. 
 - `Column` Widget
 
-`Column` digunakan untuk menyusun anak-anaknya (dalam hal ini widget `Text`) secara vertikal.
+    `Column` digunakan untuk menyusun anak-anaknya (dalam hal ini widget `Text`) secara vertikal.
 
 - `mainAxisAlignment: MainAxisAlignment.center`
 
-Properti `mainAxisAlignment` mengatur posisi anak-anak widget di **sumbu utama** (vertikal dalam `Column`). Dengan `MainAxisAlignment.center`, semua anak-anak `Column` akan ditempatkan di tengah-tengah sumbu vertikal.
+    Properti `mainAxisAlignment` mengatur posisi anak-anak widget di **sumbu utama** (vertikal dalam `Column`). Dengan `MainAxisAlignment.center`, semua anak-anak `Column` akan ditempatkan di tengah-tengah sumbu vertikal.
 
 - `crossAxisAlignment: CrossAxisAlignment.start`
 
-Properti `crossAxisAlignment` mengatur posisi anak-anak di sepanjang **sumbu sekunder** (horizontal dalam `Column`). Dengan `CrossAxisAlignment.start`, setiap anak dari `Column` akan disejajarkan di sisi **kiri** dari sumbu horizontal.
+    Properti `crossAxisAlignment` mengatur posisi anak-anak di sepanjang **sumbu sekunder** (horizontal dalam `Column`). Dengan `CrossAxisAlignment.start`, setiap anak dari `Column` akan disejajarkan di sisi **kiri** dari sumbu horizontal.
 
 - `children`
 

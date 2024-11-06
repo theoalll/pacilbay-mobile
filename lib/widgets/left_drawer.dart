@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pacilbay/menu.dart';
+import 'package:pacilbay/productentry_form.dart';
 // TODO: Impor halaman MoodEntryFormPage jika sudah dibuat
 
 import 'package:flutter/material.dart';
@@ -54,12 +55,13 @@ class LeftDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.shop_2_outlined),
             title: const Text('Tambah Produk'),
-            // Bagian redirection ke MoodEntryFormPage
+            // Bagian redirection ke ProductEntryFormPage
             onTap: () {
-              /*
-      TODO: Buatlah routing ke MoodEntryFormPage di sini,
-      setelah halaman MoodEntryFormPage sudah dibuat.
-      */
+              Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProductEntryFormPage(),
+              ));
             },
           ),
         ],

@@ -144,9 +144,47 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {}
                       },
-                      child: const Text(
-                        "Save",
-                        style: TextStyle(color: Colors.white),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary),
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Produk berhasil tersimpan'),
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('Nama produk: $_name'),
+                                        Text('Deskripsi produk: $_description'),
+                                        Text('Harga produk: $_price'),
+                                        Text('Jumlah tersedia: $_quantity'),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      child: const Text('OK'),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                        _formKey.currentState!.reset();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        },
+                        child: const Text(
+                          "Save",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   ),

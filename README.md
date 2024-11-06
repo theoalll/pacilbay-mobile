@@ -53,7 +53,7 @@ setState() adalah fungsi yang dimiliki oleh kelas State untuk mengelola keadaan 
 #### Kegunaan setstate()
 
 1. Mengupdate UI
-    Ketika keadaan suatu widget berubah (misal nilai variabel, hasil perhitungan, atau status interaksi pengguna (seperti klik tombol)), maka setState() digunakan untuk memperbarui UI supaya memeproses perubahan tersebut. Flutter akan menjalankan kembali build() dari widget yang bersangkutan dan menghasilkan UI baru yang sesuai dengan state terbaru.
+    Ketika keadaan suatu widget berubah (misal nilai variabel, hasil perhitungan, atau status interaksi *User* (seperti klik tombol)), maka setState() digunakan untuk memperbarui UI supaya memeproses perubahan tersebut. Flutter akan menjalankan kembali build() dari widget yang bersangkutan dan menghasilkan UI baru yang sesuai dengan state terbaru.
 
 2. Mengoptimalkan Proses Rebuild
     Dengan menggunakan fungsi setState(), Flutter hanya akan merebuild widget yang berkaitan dengan state yang diubah, bukan seluruh widget tree sehingga membantu meningkatkan performa aplikasi.
@@ -99,4 +99,350 @@ Pada contoh ini, variabel counter merupakan bagian dari state yang dikelola. Den
 - Selanjutnya, saya mengimplementasikan warna yang berbeda untuk setiap tombol dengan menambahkan properti `final Color color;` pada class `ItemHomepage` yang sudah dibuat sebelumnya. 
 - Saya menggunakan widget ScaffoldMessenger untuk menampilkan Snackbar ketika tombol ditekan. Dalam setiap fungsi onPressed dari tombol, saya menambahkan kode untuk menampilkan Snackbar yang sesuai
 - Setelah semua kelas selesai dimplementasikan, saya menjalankan perintah flutter analyze untuk memastikan tidak ada isu pada kode yang dapat mengganggu performa atau fungsionalitas aplikasi.
+</details>
+
+<details>
+  <summary><h2>Tugas 8: Flutter Navigation, Layouts, Forms, and Input Elements (Click to Expand)</h2></summary>
+
+### Kegunaan const di Flutter
+`const` adalah keyword di Flutter yang digunakan untuk mendefinisikan objek atau widget yang immutable (tidak bisa diubah) dan akan diinisialisasi sekali saja pada saat kompilasi. Dengan `const`, kita memastikan bahwa objek tersebut bersifat konstan dan tidak akan berubah sepanjang masa hidup aplikasi.
+
+#### Keuntungan menggunakan const
+1. **Meningkatkan Performa Aplikasi**
+   - **Reuse**: Objek `const` hanya dibuat satu kali dalam memori, sehingga dapat digunakan kembali (reused) tanpa perlu dibuat ulang.
+   - **Optimasi Rendering**: Flutter tidak perlu merender ulang widget yang diberi `const`, sehingga mempercepat proses rendering dan mengurangi kerja CPU.
+
+2. **Efisiensi Memori**
+   - Objek `const` hanya memakan memori sekali saja, karena tidak dibuat ulang setiap kali dipanggil.
+   - Penggunaan memori menjadi lebih hemat, terutama dalam aplikasi dengan banyak widget statis.
+
+3. **Deteksi Kesalahan di Waktu Kompilasi**
+   - Kesalahan yang berkaitan dengan nilai konstan dapat dideteksi lebih awal, saat proses kompilasi, bukan di runtime.
+   - Membantu pengembang menemukan bug lebih cepat dan meningkatkan keandalan aplikasi.
+
+4. **Meningkatkan Readability dan Maintainability**
+   - Kode yang menggunakan `const` lebih mudah dibaca dan dipahami, karena developer lain tahu bahwa objek tersebut tidak akan berubah.
+   - Membantu menjaga konsistensi dalam kode, sehingga lebih mudah dikelola dan di-maintain.
+
+#### Kapan Sebaiknya Menggunakan `const`?
+- **Widget Statis**: Ketika widget atau objek tidak berubah selama masa hidup aplikasi.
+  ```dart
+  const Text('Hello, Flutter');
+  ```
+
+- **Konfigurasi Aplikasi**: Untuk nilai-nilai yang tidak berubah, seperti warna, margin, padding, atau konfigurasi lainnya.
+    ```dart
+    const Color primaryColor = Colors.blue;
+    ```
+
+- **Penggunaan Berulang**: Ketika sebuah widget atau objek sering digunakan di berbagai tempat dalam aplikasi.
+    ```dart
+    const EdgeInsets allPadding = EdgeInsets.all(16.0);
+    ```
+
+#### Kapan Sebaiknya Menggunakan `const`?
+- **Widget Dinamis**: Jika widget atau objek bergantung pada input *User* atau data yang berubah.
+    ```dart
+    Text('Welcome, $userName'); // Tidak bisa menggunakan const karena userName bisa berubah
+    ```
+
+- **Stateful Widget**: Untuk widget yang memiliki state atau memerlukan perubahan selama runtime.
+    ```dart
+    setState(() {
+    // Update state
+    });
+    ```
+
+#### Contoh Penggunaan `const`?
+```dart
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Const Example'),
+        ),
+        body: Center(
+          child: Text('Hello, const world!'),
+        ),
+      ),
+    );
+  }
+}
+```
+Dalam kode Dart tersebut, penggunaan const memiliki beberapa fungsi:
+1. Konstruksi class: Konstruktor `MyApp` ditandai sebagai const, yang berarti bahwa setiap instance dari `MyApp` tidak akan berubah (immutable) dan dapat diinisialisasi sebagai konstan. Konstruktor ini membantu Flutter memahami bahwa widget ini tidak perlu dirender ulang jika tidak ada perubahan.
+2. Reusable `MaterialApp`: Dengan menggunakan const, `MaterialApp` dibuat sebagai objek immutable. Jika tidak ada perubahan pada konfigurasi aplikasi, Flutter tidak perlu membuat ulang widget ini setiap kali aplikasi dijalankan atau dirender ulang.
+3. Immutable `Text` Widget: `Text` ini memiliki nilai yang tidak akan berubah selama runtime. Dengan `const`, Flutter tidak perlu membuat ulang widget ini, yang meningkatkan efisiensi rendering.
+
+
+### Penggunaan Column dan Row pada Flutter
+
+#### 1. **Column**
+`Column` adalah widget di Flutter yang menyusun *children*-nya secara vertikal (dari atas ke bawah).
+
+**Karakteristik:**
+- Menyusun widget secara **vertikal**.
+- Bisa menyesuaikan **alignment** dan **main axis** (vertikal) serta **cross axis** (horizontal).
+- Fleksibel untuk membuat tata letak dengan elemen-elemen yang harus ditampilkan berurutan dari atas ke bawah.
+
+**Properti Utama:**
+- `mainAxisAlignment`: Mengatur bagaimana *children* diatur secara vertikal.
+- `crossAxisAlignment`: Mengatur bagaimana *children* disejajarkan secara horizontal.
+
+**Contoh Implementasi:**
+```dart
+Column(
+  mainAxisAlignment: MainAxisAlignment.center,
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Text('Item 1'),
+    Text('Item 2'),
+    Text('Item 3'),
+  ],
+)
+```
+Penggunaan `Column` dalam kode ini bertujuan untuk menyusun beberapa widget `Text` secara vertikal, dari atas ke bawah. 
+- `Column` Widget
+`Column` digunakan untuk menyusun anak-anaknya (dalam hal ini widget `Text`) secara vertikal.
+
+- `mainAxisAlignment: MainAxisAlignment.center`
+Properti `mainAxisAlignment` mengatur posisi anak-anak widget di **sumbu utama** (vertikal dalam `Column`). Dengan `MainAxisAlignment.center`, semua anak-anak `Column` akan ditempatkan di tengah-tengah sumbu vertikal.
+
+- `crossAxisAlignment: CrossAxisAlignment.start`
+Properti `crossAxisAlignment` mengatur posisi anak-anak di sepanjang **sumbu sekunder** (horizontal dalam `Column`). Dengan `CrossAxisAlignment.start`, setiap anak dari `Column` akan disejajarkan di sisi **kiri** dari sumbu horizontal.
+
+- `children`
+Daftar widget yang merupakan anak-anak dari `Column`. Dalam kode ini, ada tiga widget `Text`:
+- `Text('Item 1')`
+- `Text('Item 2')`
+- `Text('Item 3')`
+
+Ketiga widget ini akan ditampilkan secara vertikal dalam `Column`, dimulai dari sisi kiri (karena `crossAxisAlignment.start`) dan dipusatkan di sumbu vertikal (karena `mainAxisAlignment.center`).
+
+#### 2. **Row**
+`Row` adalah widget di Flutter yang menyusun *children*-nya secara horizontal (dari kiri ke kanan).
+
+**Karakteristik:**
+- Menyusun widget secara **horizontal**.
+- Sama seperti `Column`, `Row` memiliki kontrol atas **alignment** dan **main axis** (horizontal) serta **cross axis** (vertikal).
+- Digunakan untuk membuat tata letak elemen-elemen yang perlu disusun berurutan dari kiri ke kanan.
+
+**Properti Utama:**
+- `mainAxisAlignment`: Mengatur bagaimana *children* diatur secara horizontal.
+- `crossAxisAlignment`: Mengatur bagaimana *children* diatur vertikal.
+
+**Contoh Implementasi:**
+```dart
+Row(
+  mainAxisAlignment: MainAxisAlignment.spaceAround,
+  crossAxisAlignment: CrossAxisAlignment.center,
+  children: [
+    Icon(Icons.star),
+    Icon(Icons.favorite),
+    Icon(Icons.person),
+  ],
+)
+```
+Kode `Row` ini digunakan untuk menyusun tiga ikon secara horizontal dengan jarak yang merata di antara mereka.
+
+### Penjelasan Penggunaan:
+
+- `Row'
+   - Widget ini menyusun elemen-elemen anak (`children`) secara horizontal, dari kiri ke kanan.
+
+- `mainAxisAlignment: MainAxisAlignment.spaceAround`. Properti ini mengatur jarak antar elemen anak di **sumbu utama** (horizontal). Dengan `spaceAround`:
+     - Memberikan jarak yang sama di sekitar setiap elemen.
+     - Jarak antara elemen dan tepi `Row` sedikit lebih kecil dibandingkan jarak antar elemen.
+
+- `crossAxisAlignment: CrossAxisAlignment.center`
+   - Properti ini menentukan bagaimana elemen-elemen anak diatur di **sumbu sekunder** (vertikal).
+   - `center` memastikan semua ikon berada di tengah secara vertikal dalam `Row`.
+
+- `children`
+   - Berisi tiga ikon: `Icons.star`, `Icons.favorite`, dan `Icons.person`.
+   - Masing-masing ikon akan ditempatkan secara horizontal dalam `Row` dengan jarak merata.
+
+### Perbandingan `Column` vs `Row`
+
+| **Aspek**              | **Column**                          | **Row**                             |
+|------------------------|-------------------------------------|-------------------------------------|
+| **Orientasi**           | Vertikal (dari atas ke bawah)       | Horizontal (dari kiri ke kanan)     |
+| **Main Axis**           | Vertikal                            | Horizontal                          |
+| **Cross Axis**          | Horizontal                          | Vertikal                            |
+| **Penggunaan**          | Untuk menyusun elemen vertikal      | Untuk menyusun elemen horizontal    |
+| **Alignment**           | `mainAxisAlignment`, `crossAxisAlignment` | `mainAxisAlignment`, `crossAxisAlignment` |
+| **Contoh Situasi**      | Daftar item, formulir, paragraf     | Navigasi horizontal, barisan ikon   |
+
+### Contoh Penggunaan Gabungan:
+```dart
+Column(
+  children: [
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text('Left Item'),
+        Text('Right Item'),
+      ],
+    ),
+    Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(Icons.star),
+        Icon(Icons.favorite),
+        Icon(Icons.person),
+      ],
+    ),
+  ],
+)
+```
+
+### Elemen Input pada Halaman Form
+
+#### Elemen Input yang Digunakan dalam Kode:
+
+1. **`TextFormField`**:
+   - **`Nama Produk`**: Input teks untuk nama produk dengan validasi untuk memastikan tidak kosong dan tidak lebih dari 100 karakter.
+   - **`Deskripsi Produk`**: Input teks untuk deskripsi produk dengan validasi untuk memastikan tidak kosong dan tidak lebih dari 255 karakter.
+   - **`Harga Produk`**: Input teks yang memerlukan angka positif untuk harga produk, dengan validasi angka dan memastikan input adalah integer positif.
+   - **`Jumlah Tersedia`**: Input teks yang memerlukan angka positif untuk jumlah produk yang tersedia, dengan validasi serupa untuk angka dan integer positif.
+
+2. **`ElevatedButton`**:
+   - Tombol untuk menyimpan data formulir, dengan validasi formulir sebelum menampilkan dialog konfirmasi.
+
+### Elemen Input Flutter Lain yang Tidak Digunakan:
+1. **`DropdownButton`**: Untuk memilih dari daftar pilihan yang sudah ditentukan.
+2. **`Checkbox`**: Untuk input nilai boolean (true/false).
+3. **`Radio`**: Untuk memilih satu opsi dari beberapa pilihan.
+4. **`Slider`**: Untuk input angka dalam bentuk slider.
+5. **`Switch`**: Untuk input boolean yang bisa diaktifkan/dinonaktifkan.
+6. **`DatePicker`**: Untuk memilih tanggal.
+7. **`TimePicker`**: Untuk memilih waktu.
+
+### Tema (theme) dalam Aplikasi Flutter
+
+Flutter menyediakan widget `ThemeData` yang dapat diatur dalam `MaterialApp` untuk memastikan konsistensi tampilan di seluruh aplikasi. Dengan menggunakan `ThemeData`, kita bisa mengatur warna, font, bentuk tombol, gaya teks, dan elemen UI lainnya agar konsisten di seluruh aplikasi.
+
+Dalam aplikasi Flutter yang saya buat, saya menggunakan tema utama yang didefinisikan di `main.dart`. Tema ini berfungsi sebagai **"base"** untuk seluruh screens dan widget lainnya, memastikan konsistensi desain dan gaya di seluruh aplikasi.
+
+Di dalam `main.dart`, saya mengatur `ThemeData` menggunakan `colorScheme` dan beberapa pengaturan tambahan:
+
+```dart
+MaterialApp(
+  theme: ThemeData(
+    colorScheme: ColorScheme.fromSwatch(
+      primarySwatch: Colors.deepOrange,
+    ).copyWith(
+      secondary: Colors.deepOrange[400],
+    ),
+    useMaterial3: true, // Mengaktifkan Material Design 3
+  ),
+  home: MyHomePage(),
+);
+```
+
+1. **MaterialApp**:
+   - `MaterialApp` adalah widget utama yang membungkus aplikasi Flutter. Parameter `theme` membuat kita bisa menentukan tema global yang akan diterapkan ke seluruh aplikasi.
+
+2. **ThemeData**:
+   - `ThemeData` adalah konfigurasi tema yang berisi berbagai pengaturan seperti skema warna, font, dan gaya lainnya.
+
+3. **colorScheme**:
+   - **`ColorScheme.fromSwatch`**: Digunakan untuk membuat skema warna berbasis warna utama yang kita pilih (`primarySwatch`). Dalam contoh ini, `primarySwatch` diatur ke `Colors.deepOrange`.
+   - **`copyWith`**: Digunakan untuk menyesuaikan skema warna lebih lanjut. Dalam kode ini, `secondary` diatur ke `Colors.deepOrange[400]`. Warna sekunder biasanya digunakan untuk elemen tambahan seperti tombol aksi sekunder dan ikon.
+
+4. **useMaterial3**:
+   - **`useMaterial3: true`**: Mengaktifkan penggunaan **Material Design 3**, yang menghadirkan fitur desain baru dan penyesuaian yang lebih baik untuk elemen UI, seperti tombol, card, dan lainnya.
+
+5. **home**:
+   - Menentukan layar awal aplikasi, dalam hal ini, `MyHomePage`.
+
+### Navigasi dalam aplikasi dengan banyak halaman pada Flutter
+
+Navigasi dalam aplikasi ini ditangani menggunakan **`Navigator`** dengan metode **`pushReplacement`** dan **`push`** untuk berpindah antar halaman.
+
+#### 1. **Penggunaan `Navigator.pushReplacement`**
+   - **`Navigator.pushReplacement`** digunakan untuk mengganti halaman saat ini dengan halaman baru. `Navigator.pushReplacement` memastikan bahwa halaman sebelumnya tidak akan tetap berada dalam *stack* navigasi.
+   - **Keuntungan**: *User* tidak dapat kembali ke halaman sebelumnya dengan tombol "back", sehingga cocok untuk skenario seperti mengalihkan *User* ke halaman utama atau formulir tertentu setelah tindakan tertentu.
+
+   **Contoh**:
+   ```dart
+   ListTile(
+     leading: const Icon(Icons.home_outlined),
+     title: const Text('Halaman Utama'),
+     onTap: () {
+       Navigator.pushReplacement(
+         context,
+         MaterialPageRoute(
+           builder: (context) => MyHomePage(),
+         ),
+       );
+     },
+   );
+   ```
+   Dalam contoh ini, ketika *User* mengetuk "Halaman Utama", mereka akan diarahkan ke `MyHomePage`, dan halaman sebelumnya akan dihapus dari *stack* navigasi.
+
+Selain menggunakan **`pushReplacement`** untuk navigasi melalui drawer, saya juga menggunakan **`Navigator.push`** di dalam **`InkWell`** pada halaman menu untuk navigasi ke halaman lain.
+
+#### 2. **Navigasi dengan `Navigator.push`**
+   - **`Navigator.push`** menambahkan halaman baru ke *stack* navigasi, memungkinkan *user* untuk kembali ke halaman sebelumnya dengan tombol "back".
+   - **Perbedaan dengan `pushReplacement`**: 
+     - **`push`** menambahkan halaman ke *stack* navigasi.
+     - **`pushReplacement`** mengganti halaman saat ini, sehingga halaman sebelumnya dihapus dari *stack* navigasi.
+   - **Keuntungan**: Memungkinkan navigasi dengan kemampuan untuk kembali ke halaman sebelumnya, misalnya, setelah menyelesaikan suatu tugas atau form.
+
+   ```dart
+   Navigator.push(
+     context,
+     MaterialPageRoute(
+       builder: (context) => ProductEntryFormPage(),
+     ),
+   );
+   ```
+   Dalam contoh ini, ketika item menu dengan nama "Tambah Produk" diklik, aplikasi akan menavigasi ke `ProductEntryFormPage`, dan *user* dapat kembali ke halaman sebelumnya dengan tombol "back".
+
+### 3. **Penggunaan `Drawer` untuk Navigasi**
+   - **`Drawer`** adalah komponen navigasi yang menampilkan side menu. *User* dapat memilih item menu untuk berpindah antar halaman.
+   - Setiap **`ListTile`** dalam `Drawer` memicu navigasi ke halaman yang berbeda.
+   - **Contoh item Drawer**:
+     - **Halaman Utama**: Mengarahkan ke `MyHomePage`.
+     - **Tambah Produk**: Mengarahkan ke `ProductEntryFormPage`.
+
+   **Kode**:
+   ```dart
+   Drawer(
+     child: ListView(
+       children: [
+         // Header Drawer
+         DrawerHeader(...),
+         // Navigasi ke Halaman Utama
+         ListTile(
+           leading: const Icon(Icons.home_outlined),
+           title: const Text('Halaman Utama'),
+           onTap: () {
+             Navigator.pushReplacement(
+               context,
+               MaterialPageRoute(builder: (context) => MyHomePage()),
+             );
+           },
+         ),
+         // Navigasi ke Tambah Produk
+         ListTile(
+           leading: const Icon(Icons.shop_2_outlined),
+           title: const Text('Tambah Produk'),
+           onTap: () {
+             Navigator.pushReplacement(
+               context,
+               MaterialPageRoute(builder: (context) => ProductEntryFormPage()),
+             );
+           },
+         ),
+       ],
+     ),
+   );
+   ```
+
 </details>

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pacilbay/screens/productentry_form.dart';
 
+import '../screens/list_productentry.dart';
+
 class ItemHomepage {
   final String name;
   final IconData icon;
@@ -41,6 +43,13 @@ class ItemCard extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) => ProductEntryFormPage(),
                 ));
+          }
+          else if (item.name == "Lihat Produk") {
+            Navigator.push(context,
+              MaterialPageRoute(
+                  builder: (context) => const ProductEntryPage()
+              ),
+            );
           }
         },
         // Container untuk menyimpan Icon dan Text

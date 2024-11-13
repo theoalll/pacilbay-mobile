@@ -4,6 +4,8 @@ import 'package:pacilbay/screens/productentry_form.dart';
 
 import 'package:flutter/material.dart';
 
+import '../screens/list_productentry.dart';
+
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
 
@@ -61,6 +63,17 @@ class LeftDrawer extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) => ProductEntryFormPage(),
               ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.shop_2),
+            title: const Text('Daftar Produk'),
+            onTap: () {
+              // Route menu ke halaman mood
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ProductEntryPage()),
+              );
             },
           ),
         ],

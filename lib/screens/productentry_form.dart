@@ -1,5 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:pacilbay/widgets/left_drawer.dart';
+
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
+
+import 'menu.dart';
 
 class ProductEntryFormPage extends StatefulWidget {
   const ProductEntryFormPage({super.key});
@@ -10,12 +17,13 @@ class ProductEntryFormPage extends StatefulWidget {
 
 class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
   final _formKey = GlobalKey<FormState>();
-  String _name = "";
-  String _description = "";
+  String _productName = "";
+  String _productDescription = "";
   int _price = 0;
-  int _quantity = 0;
+  int _availableQty = 0;
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: const Center(
@@ -46,7 +54,7 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        _name = value!;
+                        _productName = value!;
                       });
                     },
                     validator: (String? value) {
@@ -72,7 +80,7 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        _description = value!;
+                        _productDescription = value!;
                       });
                     },
                     validator: (String? value) {
@@ -129,7 +137,7 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                     ),
                     onChanged: (String? value) {
                       setState(() {
-                        _quantity = int.tryParse(value!) ?? 0;
+                        _availableQty = int.tryParse(value!) ?? 0;
                       });
                     },
                     validator: (String? value) {
@@ -164,36 +172,36 @@ class _ProductEntryFormPageState extends State<ProductEntryFormPage> {
                           backgroundColor: MaterialStateProperty.all(
                               Theme.of(context).colorScheme.primary),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: const Text('Produk berhasil tersimpan'),
-                                  content: SingleChildScrollView(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Nama produk: $_name'),
-                                        Text('Deskripsi produk: $_description'),
-                                        Text('Harga produk: $_price'),
-                                        Text('Jumlah tersedia: $_quantity'),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      child: const Text('OK'),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                        _formKey.currentState!.reset();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
+                            // Kirim ke Django dan tunggu respons
+                            final response = await request.postJson(
+                              "http://127.0.0.1:8000/create-flutter/",
+                              jsonEncode(<String, String>{
+                                'product_name': _productName,
+                                'price': _price.toString(),
+                                'product_description': _productDescription,
+                                'available_qty': _availableQty.toString(),
+                              }),
                             );
+                            if (context.mounted) {
+                              if (response['status'] == 'success') {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content: Text("Produk baru berhasil disimpan!"),
+                                ));
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => MyHomePage()),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content:
+                                  Text("Terdapat kesalahan, silakan coba lagi."),
+                                ));
+                              }
+                            }
                           }
                         },
                         child: const Text(
